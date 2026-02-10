@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ADV Shop</title>
+</head>
+<body>
+<div style="text-align: center; margin-top: 50px;">
+    <h3>Welcome</h3>
+    <p>Klik tombol di bawah untuk melihat daftar produk</p>
+
+    <a th:href="@{/product/list}">
+        <button type="button">Product List</button>
+    </a>
+</div>
+</body>
+</html>
