@@ -77,3 +77,11 @@ The implementation follows clean architecture principles and demonstrates proper
 This exercise helped reinforce clean code practices, layered architecture design, and basic secure coding principles in **Spring Boot** applications.
 
 ---
+
+# Reflection 2
+
+1. **Code Coverage vs. Code Quality** Having 100% code coverage does not guarantee that the code is free of bugs or errors. Code coverage only reflects that every line of code was executed during testing; it does not verify that the logic is correct or that all possible edge cases (e.g., negative inputs, missing fields) are handled properly.
+
+2. **Clean Code in Functional Tests** Creating a new functional test class with the exact same setup procedures and instance variables (serverPort, testBaseUrl, baseUrl) as the previous test suites violates the DRY (Don't Repeat Yourself) principle. This duplication lowers code quality and makes maintenance difficult.
+
+Improvement: To fix this, I should create a BaseFunctionalTest class that handles the common setup configuration. All specific functional test classes (like CreateProductFunctionalTest and HomePageFunctionalTest) should extend this base class. This removes code duplication and keeps the test files clean and focused on their specific logic.
