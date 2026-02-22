@@ -85,3 +85,27 @@ This exercise helped reinforce clean code practices, layered architecture design
 2. **Clean Code in Functional Tests** Creating a new functional test class with the exact same setup procedures and instance variables (serverPort, testBaseUrl, baseUrl) as the previous test suites violates the DRY (Don't Repeat Yourself) principle. This duplication lowers code quality and makes maintenance difficult.
 
 Improvement: To fix this, I should create a BaseFunctionalTest class that handles the common setup configuration. All specific functional test classes (like CreateProductFunctionalTest and HomePageFunctionalTest) should extend this base class. This removes code duplication and keeps the test files clean and focused on their specific logic.
+
+---
+
+## MODULE 2 : CI/CD Reflection
+
+### 1. Code Quality Issues and Fix Strategy
+
+During this exercise, the main code quality issue I fixed was a SonarQube warning related to workflow permissions.
+The workflow was using a global permissions: read-all, which violated the principle of least privilege. 
+This configuration was considered too broad because it granted unnecessary access to the workflow.
+
+To fix this, I replaced the global permission with more specific permissions at the job level. I set contents: read and actions: read 
+to ensure the workflow only had the access it actually needed. After making this change, 
+the SonarQube warning was resolved and the OSSF Scorecard workflow continued to run normally in the public repository.
+
+### 2. Evaluation of CI/CD Implementation
+
+I think the current workflow already meets the concept of Continuous Integration because every push and 
+pull request automatically runs tests and code analysis. This helps ensure that new changes are checked 
+before being merged into the main branch.
+
+It also follows Continuous Deployment since the application is automatically deployed to a PaaS after a 
+successful build and test process. This means there is no need for manual deployment steps. Overall, 
+the CI/CD pipeline is working as expected because testing, analysis, and deployment are all automated and connected.
