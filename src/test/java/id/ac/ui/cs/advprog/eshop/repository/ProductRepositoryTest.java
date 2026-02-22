@@ -129,4 +129,59 @@ class ProductRepositoryTest {
         Iterator<Product> productIterator = productRepository.findAll();
         assertTrue(productIterator.hasNext());
     }
+
+    @Test
+    void testCreateProductWithNullId() {
+        Product product = new Product();
+        product.setProductId(null);
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+
+        Product result = productRepository.create(product);
+
+        assertNotNull(result.getProductId());
+        assertFalse(result.getProductId().isEmpty());
+    }
+
+    @Test
+    void testCreateProductWithEmptyId() {
+        Product product = new Product();
+        product.setProductId("");
+        product.setProductName("Sampo Cap Usep");
+        product.setProductQuantity(50);
+
+        Product result = productRepository.create(product);
+
+        assertNotNull(result.getProductId());
+        assertFalse(result.getProductId().isEmpty());
+    }
+
+    @Test
+    void testFindByIdExistingProduct() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product result = productRepository.findById("eb558e9f-1c39-460e-8860-71af6af63bd6");
+
+        assertNotNull(result);
+        assertEquals(product.getProductId(), result.getProductId());
+        assertEquals(product.getProductName(), result.getProductName());
+        assertEquals(product.getProductQuantity(), result.getProductQuantity());
+    }
+
+    @Test
+    void testFindByIdNonExistentProduct() {
+        Product product = new Product();
+        product.setProductId("eb558e9f-1c39-460e-8860-71af6af63bd6");
+        product.setProductName("Sampo Cap Bambang");
+        product.setProductQuantity(100);
+        productRepository.create(product);
+
+        Product result = productRepository.findById("non-existent-id");
+
+        assertNull(result);
+    }
 }
