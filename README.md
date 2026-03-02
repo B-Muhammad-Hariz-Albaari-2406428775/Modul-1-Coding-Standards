@@ -109,3 +109,47 @@ before being merged into the main branch.
 It also follows Continuous Deployment since the application is automatically deployed to a PaaS after a 
 successful build and test process. This means there is no need for manual deployment steps. Overall, 
 the CI/CD pipeline is working as expected because testing, analysis, and deployment are all automated and connected.
+
+---
+
+# Reflection 3
+
+## MODULE 3 : SOLID Principles Reflection
+
+### 1. Principles Applied
+
+**Single Responsibility Principle (SRP)**  
+`CarController` was moved into its own separate file (`CarController.java`) instead of being bundled together with `ProductController.java`. Now each controller only handles what it's supposed to. one class, one job.
+
+**Open/Closed Principle (OCP)**  
+`CarController` no longer extends `ProductController`. This inheritance was problematic because any change to `ProductController` could silently break `CarController`. Now both are independent and can be extended without touching each other.
+
+**Liskov Substitution Principle (LSP)**  
+The `CarController extends ProductController` relationship was removed because a Car is simply not a Product. Forcing that inheritance just to reuse some behavior was semantically wrong and could lead to subtle bugs down the line.
+
+**Dependency Inversion Principle (DIP)**  
+`CarController` used to inject `CarServiceImpl` directly (a concrete class). It now depends on the `CarService` interface instead, which is the right way to do it, high-level modules shouldn't care about implementation details.
+
+> ISP (Interface Segregation Principle) was already in good shape from the start. `CarService` and `ProductService` are separate interfaces, so neither forces irrelevant methods on their implementors.
+
+---
+
+### 2. Advantages of Applying SOLID Principles
+
+- **Easier to maintain**: With SRP in place, if something breaks in the Car feature, you know exactly where to look — `CarController.java`. No need to dig through unrelated Product code.
+
+- **Less risk of breaking things**: After fixing the OCP violation, changes to `ProductController` won't accidentally affect `CarController` anymore. Before, a small change in the parent class could break Car behavior in ways that were hard to trace.
+
+- **Easier to test**: Since `CarController` now depends on the `CarService` interface (DIP), you can easily mock the service in unit tests without having to spin up the full `CarServiceImpl` with all its dependencies.
+
+- **Things make sense semantically**: Removing the `extends ProductController` (LSP fix) means Car endpoints no longer accidentally inherit Product behavior. What you see in the code is what actually happens at runtime.
+
+---
+
+### 3. Disadvantages of Not Applying SOLID Principles
+
+- **SRP violation** — Having both controllers in one file means the file has too many reasons to change. Updating Car routing logic forces you to touch the same file as Product logic, which increases the chance of introducing unintended bugs in unrelated features.
+
+- **OCP & LSP violation** — `CarController extends ProductController` caused Car to silently inherit all Product mappings. If someone added a new method to `ProductController`, `CarController` would be affected without anyone realizing it. That kind of hidden dependency makes the codebase unpredictable.
+
+- **DIP violation** — Injecting `CarServiceImpl` directly into the controller creates tight coupling. If the implementation ever needs to change (say, swapping in-memory storage for a real database), you'd have to go back and change the controller too. Depending on the interface avoids all of that.
